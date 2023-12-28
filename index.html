@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1280px;
+            height:640px;
+            background-image: url("../images/Airplane/game_bg.jpg");
+            margin: auto;
+            position: relative;
+        }
+    </style>
+    <script src="./GameObject.js"></script>
+    <script src="./Hero.js"></script>
+    <script src="./Enemy.js"></script>
+    <script src="./Bullet.js"></script>
+    <script>
+        let wrapper;
+        let hero;
+        let enemyImgArray=[
+            "../images/Airplane/enemy1.gif",
+            "../images/Airplane/enemy2.gif",
+            "../images/Airplane/enemy3.gif",
+            "../images/Airplane/enemy4.gif"
+        ];
+        
+        let enemyArray=[]; //생성된 모든 적군을 담을 배열
+        let bulletArray=[];//생성된 총알을 담게될 배열 
+
+        function createHero(){
+            hero = new Hero(wrapper, "../images/Airplane/plane.png", 100,100, 80,60,0,0);
+        }
+        
+        function createEnemy(){
+            for(let i=0;i<enemyImgArray.length;i++){
+                let enemy = new Enemy(wrapper, enemyImgArray[i], 1000, i*120, 70,60,-3,0);
+                enemyArray.push(enemy); //배열에 담기
+            }
+        }
+        
+        function fire(){
+            let bullet = 
+            new Bullet(wrapper, "../images/mashroom.jpg"
+            , hero.x+hero.width, hero.y + hero.height*(1/2), 25,25, 7,0);
+            
+            bulletArray.push(bullet); //배열에 담기
+        }
+
+        function gameLoop(){
+            hero.move();
+            
+            //적군의 움직임 호출 
+            for(let i=0;i<enemyArray.length;i++){
+                enemyArray[i].move();
+            }
+
+            //총알 날리기
+            for(let i=0;i<bulletArray.length;i++){
+                bulletArray[i].move();
+            }
+
+        }
+
+        addEventListener("load", function(){
+            wrapper = document.getElementById("wrapper");
+            createHero();
+            createEnemy();
+
+            //키보드 이벤트 연결 
+            document.body.addEventListener("keydown", function(){
+                switch(event.keyCode){
+                    case 32:fire();break; //총알발사
+                    case 37: ;break; //left
+                    case 39: ;break; //right
+                    case 38: ;break; //up
+                    case 40: ;break; //bottom
+                }
+            });
+
+            setInterval("gameLoop()", 10);
+        });
+    </script>
+</head>
+<body>
+    
+    <div id="wrapper"></div>
+
+</body>
+</html>
